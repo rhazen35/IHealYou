@@ -1,5 +1,5 @@
 @import '_variables';
 
-* {
-  background-color: $black;
-}
+@import 'layout/_header';
+
+@import 'home/_home';
