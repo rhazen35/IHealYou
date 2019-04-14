@@ -1,8 +1,18 @@
 .home {
+  width:100%;
+  margin-top: 4rem;
 
- .banner {
+ .title {
+   width:100%;
+   text-align:center;
    padding:1rem;
    font-size:150%;
    font-weight:bold;
  }
+
+  .intro {
+    width:50%;
+    margin: 0 auto;
+    padding:3rem;
+  }
 }
