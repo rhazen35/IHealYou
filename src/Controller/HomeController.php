@@ -14,6 +14,9 @@ class HomeController extends AbstractController
     {
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
+            'banner_class' => 'banner-home',
+            'banner_title' => "Homöopathie und Craniosacrale Therapie",
+            'banner_subtitle' => "Christian Brombach"
         ]);
     }
 }

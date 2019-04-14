@@ -1,0 +1,38 @@
+.banner {
+  height: 25rem;
+  position: relative;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  .title {
+    font-family: 'Merriweather', serif;
+    text-align: center;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -40%);
+    color: $white;
+    font-size:175%;
+  }
+
+  .sub-title {
+    margin-top:5rem;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: $white;
+    font-family: 'Courgette', cursive;
+    font-size:150%;
+  }
+}
+
+.banner-home {
+  background-image: linear-gradient(
+                  rgba(0, 0, 0, 0.5),
+                  rgba(0, 0, 0, 0.5)
+  ),
+  url("../../../public/images/banners/sylt-westrand-dunen.jpg");
+}
