@@ -28,8 +28,14 @@
     font-size:150%;
   }
 
-  .owner {
+  .phone {
     line-height:5rem;
     padding-right:1rem;
+    font-family: $ptSans;
   }
+}
+
+.header-moved {
+  color: $black;
+  box-shadow: inset 0 0 0 1000px rgba(255,255,255,.9);
 }
