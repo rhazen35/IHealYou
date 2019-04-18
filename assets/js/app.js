@@ -9,3 +9,6 @@ require('../scss/app.scss');
 
 const header = require('./layout/header');
 new header.default();
+
+const menu = require('./layout/menu');
+new menu.default();

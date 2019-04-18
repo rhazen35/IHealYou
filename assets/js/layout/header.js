@@ -1,15 +1,25 @@
-
+/**
+ * Header Module
+ */
 class Header {
 
+    /**
+     * Constructor
+     */
     constructor() {
 
+        // Launch the events
         this.events();
     }
 
+    /**
+     * Events
+     */
     events() {
 
         let header = document.getElementById('header');
 
+        // Add a scroll event on the header.
         window.addEventListener('scroll', (event) => {
 
            let position = window.scrollY;

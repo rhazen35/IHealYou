@@ -1,18 +1,20 @@
 .header {
-  z-index:10000;
+  z-index:9999;
   position:fixed;
   display:flex;
   flex-flow: row wrap;
-  justify-content: space-between;
+  justify-content: center;
   top:0;
   left:0;
   width:100%;
   height:5rem;
   color: $white;
   box-shadow: inset 0 0 0 1000px rgba(0,0,0,.1);
+  overflow:hidden;
 
 
   .logo {
+    z-index:10000;
     width:5rem;
     height:5rem;
 
@@ -23,14 +25,19 @@
   }
 
   .title {
+    flex:1;
+    padding-left:1rem;
     line-height:5rem;
     font-family: 'Rancho', cursive;
     font-size:150%;
+    text-align:left;
   }
 
   .phone {
-    line-height:5rem;
+    flex:2;
     padding-right:1rem;
+    text-align:right;
+    line-height:5rem;
     font-family: $ptSans;
   }
 }

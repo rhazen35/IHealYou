@@ -1,0 +1,16 @@
+.appointment {
+  margin-top:2rem;
+
+  .title {
+    font-weight: bold;
+    font-family: 'PT Sans', sans-serif;
+    font-size: 110%;
+  }
+
+  .text {
+    margin-top:2rem;
+    p {
+      padding:1rem;
+    }
+  }
+}
