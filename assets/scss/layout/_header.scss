@@ -44,5 +44,6 @@
 
 .header-moved {
   color: $black;
-  box-shadow: inset 0 0 0 1000px rgba(255,255,255,.9);
+  box-shadow: inset 0 0 0 1000px $platinum;
+  border-bottom: 1px solid darken($platinum, 10%);
 }

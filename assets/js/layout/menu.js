@@ -26,6 +26,9 @@ class Menu {
 
                let container = document.getElementById(event.target.id.replace('-link', ''));
                container.scrollIntoView({behavior: "smooth"});
+
+                let topOfElement = container.offsetTop - 80;
+                window.scroll({ top: topOfElement, behavior: "smooth" });
             });
         }
     }
