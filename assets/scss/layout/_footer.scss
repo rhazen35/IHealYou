@@ -1,3 +1,19 @@
 .footer {
   width:100%;
+  margin-top:2rem;
+  background: $richBlack;
+  overflow: hidden;
+
+  .author {
+    padding: 4rem;
+    color: $platinum;
+  }
+
+  .copy {
+    width:100%;
+    margin-top:3rem;
+    padding:1rem;
+    color: $platinum;
+    text-align:center;
+  }
 }
