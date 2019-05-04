@@ -16,7 +16,7 @@ class Appointment implements AppointmentInterface
     /**
      * @var AddressInterface $location
      */
-    private $location
+    private $location;
 
     /**
      * @param DateTime $date
