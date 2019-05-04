@@ -35,7 +35,12 @@
         </div>
         <div class="text">
             <div class="image"></div>
-            <div class="button">Make an appointment</div>
+            <form id="appointment-form">
+                <input type="text" id="new-appointment-fullName" name="fullName" value="" placeholder="Full Name" required>
+                <input tyzpe="email" id="new-appointment-email" name="email" value="" placeholder="E-Mail" required>
+                <input type="datetime-local" id="new-appointment-datetime" value="" placeholder="Pick a date and time" required>
+                <input type="submit" class="button" value="Make an appointment">
+            </form>
         </div>
     </div>
 
