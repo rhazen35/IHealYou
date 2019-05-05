@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Application\Scheduler\Contracts\AppointmentInterface;
 use App\Application\Scheduler\Scheduler;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,10 +15,6 @@ class HomeController extends AbstractController
      * @var Scheduler
      */
     private $scheduler;
-    /**
-     * @var AppointmentInterface
-     */
-    private $appointment;
 
     /**
      * HomeController constructor.
@@ -28,7 +23,6 @@ class HomeController extends AbstractController
     public function __construct(Scheduler $scheduler)
     {
         $this->scheduler = $scheduler;
-        $this->appointment = $scheduler->appointment;
     }
 
     /**
@@ -51,9 +45,8 @@ class HomeController extends AbstractController
      */
     public function newAppointment(Request $request)
     {
-        $data = json_decode($request->getContent(), true)['data'];
-        $datetime = DateTime::createFromFormat("Y-m-d\TH:i", $data['datetime']);
+        $response = $this->scheduler->newAppointment(json_decode($request->getContent(), true)['data']);
 
-        return new JsonResponse(array('data' => $data));
+        return new JsonResponse(array('data' => $response));
     }
 }

@@ -24,4 +24,13 @@ class Scheduler
     ) {
         $this->appointment = $appointment;
     }
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function newAppointment($data)
+    {
+        return $this->appointment->new($data);
+    }
 }

@@ -2,10 +2,7 @@
 
 namespace App\Application\Scheduler;
 
-use App\Application\Scheduler\Contracts\AddressInterface;
-use App\Application\Scheduler\Contracts\AppointmentContextInterface;
 use App\Application\Scheduler\Contracts\AppointmentInterface;
-use DateTime;
 
 /**
  * Class Appointment
@@ -14,26 +11,40 @@ use DateTime;
 class Appointment implements AppointmentInterface
 {
     /**
-     * @var AddressInterface $location
+     * @var $location
      */
     private $location;
 
     /**
-     * @param DateTime $date
-     * @param AddressInterface $location
-     * @param array UserInterface[] $guests
-     * @param array UserInterface[] $recipients
-     * @param AppointmentContextInterface $context
+     * @var ValidateFields
+     */
+    private $validateFields;
+
+    /**
+     * Appointment constructor.
+     * @param ValidateFields $validateFields
+     */
+    public function __construct(ValidateFields $validateFields)
+    {
+        $this->validateFields = $validateFields;
+    }
+
+    /**
+     * @param $data
      * @return mixed
      */
-    public function new(
-        DateTime $date,
-        AddressInterface $location,
-        array $guests,
-        array $recipients,
-        AppointmentContextInterface $context
-    ) {
-        // TODO: Implement new() method.
+    public function new($data)
+    {
+        $validated = $this->validateFields->validate($data);
+
+        if ($validated['type'] === "success") {
+
+            // Store the appointment
+        }
+
+        return $validated;
+
+        //DateTime::createFromFormat("Y-m-d\TH:i", $data['datetime'])
     }
 
     public function get()

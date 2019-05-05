@@ -23,20 +23,10 @@ interface AppointmentInterface
      * 4.) Which persons are the recipients of the participants? $users
      * 5.) In which context will this appointment take place? $context
      *
-     * @param DateTime $date
-     * @param AddressInterface $location
      * @param array UserInterface[] $guests
-     * @param array UserInterface[] $recipients
-     * @param AppointmentContextInterface $context
      * @return mixed
      */
-    public function new(
-        DateTime $date,
-        AddressInterface $location,
-        array $guests,
-        array $recipients,
-        AppointmentContextInterface $context
-    );
+    public function new($data);
 
     public function get();
 
