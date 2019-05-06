@@ -2,24 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="199f5c31-7183-4a35-b29a-83c811d6a4ef" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/assets/scss/loaders/_checkmark.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/scss/loaders/_timer.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Application/Scheduler/ValidateFields.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/js/scheduler/appointment.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/scheduler/appointment.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/scss/_variables.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/scss/_variables.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/scss/app.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/scss/app.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/scss/appointment/_appointment.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/scss/appointment/_appointment.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Application/Scheduler/Appointment.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Scheduler/Appointment.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Application/Scheduler/Contracts/AddressInterface.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Application/Scheduler/Contracts/AppointmentContextInterface.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Application/Scheduler/Contracts/AppointmentInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Scheduler/Contracts/AppointmentInterface.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Application/Scheduler/Location/Address.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Application/Scheduler/Location/Contracts/AddressInterface.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Application/Scheduler/Scheduler.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Application/Scheduler/Scheduler.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/HomeController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/home/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home/index.html.twig" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -65,7 +49,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Controller/HomeController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="762">
+            <state relative-caret-position="748">
               <caret line="49" column="60" selection-start-line="49" selection-start-column="60" selection-end-line="49" selection-end-column="60" />
               <folding>
                 <element signature="e#34#74#0#PHP" expanded="true" />
@@ -83,11 +67,29 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Application/Scheduler/Appointment.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="442">
               <caret line="41" column="36" selection-start-line="41" selection-start-column="36" selection-end-line="41" selection-end-column="36" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.env">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="442">
+              <caret line="26" column="65" selection-start-line="26" selection-start-column="65" selection-end-line="26" selection-end-column="65" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Migrations/Version20190506195445.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -121,7 +123,6 @@
         <option value="$PROJECT_DIR$/config/packages/doctrine.yaml" />
         <option value="$PROJECT_DIR$/config/packages/sonata_media.yaml" />
         <option value="$PROJECT_DIR$/config/bundles.php" />
-        <option value="$PROJECT_DIR$/.env" />
         <option value="$PROJECT_DIR$/.env.local" />
         <option value="C:/php7.1/php.ini" />
         <option value="$PROJECT_DIR$/public/index.php" />
@@ -164,6 +165,7 @@
         <option value="$PROJECT_DIR$/assets/js/scheduler/appointment.js" />
         <option value="$PROJECT_DIR$/src/Application/Scheduler/ValidateFields.php" />
         <option value="$PROJECT_DIR$/src/Application/Scheduler/Appointment.php" />
+        <option value="$PROJECT_DIR$/.env" />
       </list>
     </option>
   </component>
@@ -318,6 +320,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -363,6 +366,12 @@
             <path>
               <item name="IHealYou" type="b2602c69:ProjectViewProjectNode" />
               <item name="IHealYou" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="Migrations" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="IHealYou" type="b2602c69:ProjectViewProjectNode" />
+              <item name="IHealYou" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -375,7 +384,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -436,7 +444,10 @@
       <workItem from="1556911258602" duration="3203000" />
       <workItem from="1556955011578" duration="12024000" />
       <workItem from="1556999387308" duration="921000" />
-      <workItem from="1557056137869" duration="14249000" />
+      <workItem from="1557056137869" duration="14903000" />
+      <workItem from="1557171352775" duration="72000" />
+      <workItem from="1557171652606" duration="268000" />
+      <workItem from="1557172053730" duration="496000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Webpack encore setup">
       <created>1554728773804</created>
@@ -463,13 +474,12 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="74059000" />
+    <option name="totallyTimeSpent" value="75549000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23880596" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2468017" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -484,7 +494,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.3281412" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" weight="0.32872504" />
-      <window_info anchor="bottom" id="Terminal" order="11" weight="0.38317758" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.38317758" />
       <window_info anchor="bottom" id="Messages" order="12" weight="0.32872504" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -525,7 +535,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="Inititalize Sonata Bundle" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/assets/css/app.css" />
     <entry file="file://$PROJECT_DIR$/config/routes.yaml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -537,13 +546,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
           <caret line="26" column="94" selection-start-line="26" selection-start-column="94" selection-end-line="26" selection-end-column="94" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.env">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="26" selection-end-line="35" />
         </state>
       </provider>
     </entry>
@@ -590,13 +592,7 @@
     <entry file="file://$PROJECT_DIR$/assets/scss/home/_home.scss" />
     <entry file="file://$PROJECT_DIR$/assets/scss/layout/_footer.scss" />
     <entry file="file://$PROJECT_DIR$/templates/layout/footer.html.twig" />
-    <entry file="file://$PROJECT_DIR$/src/Application/Scheduler/Contracts/AddressInterface.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="1" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Application/Scheduler/Contracts/AddressInterface.php" />
     <entry file="file://$PROJECT_DIR$/src/Application/Scheduler/Contracts/SchedulerInterface.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -629,27 +625,9 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Application/Scheduler/Location/Location.php" />
-    <entry file="file://$PROJECT_DIR$/src/Application/Scheduler/Location/Address.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="11" selection-start-line="13" selection-start-column="11" selection-end-line="13" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Application/Scheduler/Location/Contracts/AddressInterface.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" selection-start-line="6" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Application/Scheduler/Contracts/AppointmentContextInterface.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="37" selection-start-line="4" selection-start-column="37" selection-end-line="4" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Application/Scheduler/Location/Address.php" />
+    <entry file="file://$PROJECT_DIR$/src/Application/Scheduler/Location/Contracts/AddressInterface.php" />
+    <entry file="file://$PROJECT_DIR$/src/Application/Scheduler/Contracts/AppointmentContextInterface.php" />
     <entry file="file://$PROJECT_DIR$/src/Application/Scheduler/Contracts/AppointmentInterface.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="476">
@@ -661,16 +639,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="8" column="47" selection-start-line="8" selection-start-column="47" selection-end-line="8" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Controller/HomeController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="762">
-          <caret line="49" column="60" selection-start-line="49" selection-start-column="60" selection-end-line="49" selection-end-column="60" />
-          <folding>
-            <element signature="e#34#74#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -723,6 +691,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Controller/HomeController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="748">
+          <caret line="49" column="60" selection-start-line="49" selection-start-column="60" selection-end-line="49" selection-end-column="60" />
+          <folding>
+            <element signature="e#34#74#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Application/Scheduler/Scheduler.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="493">
@@ -741,6 +719,20 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="442">
           <caret line="41" column="36" selection-start-line="41" selection-start-column="36" selection-end-line="41" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.env">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="26" column="65" selection-start-line="26" selection-start-column="65" selection-end-line="26" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Migrations/Version20190506195445.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
         </state>
       </provider>
     </entry>
