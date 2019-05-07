@@ -46,6 +46,8 @@ class Appointment {
 
             response.then((data) => {
 
+                console.log(data);
+
                 this.removeErrors();
                 this.loader(false);
 

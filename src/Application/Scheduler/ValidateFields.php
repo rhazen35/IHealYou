@@ -2,12 +2,19 @@
 
 namespace App\Application\Scheduler;
 
+use Doctrine\Common\Persistence\ObjectManager;
+
 /**
  * Class ValidateFields
  * @package App\Application\Scheduler
  */
 class ValidateFields
 {
+    public function __construct()
+    {
+
+    }
+
     /**
      * @param $data
      * @return mixed

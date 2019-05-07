@@ -2,7 +2,7 @@
 
 namespace App\Application\Scheduler;
 
-use App\Application\Scheduler\Contracts\AppointmentInterface;
+use App\Repository\AppointmentRepository;
 
 /**
  * Class Scheduler
@@ -11,18 +11,25 @@ use App\Application\Scheduler\Contracts\AppointmentInterface;
 class Scheduler
 {
     /**
-     * @var AppointmentInterface
+     * @var AppointmentAcceptable
      */
-    public $appointment;
+    private $acceptableAppointment;
+    /**
+     * @var AppointmentRepository
+     */
+    private $appointmentRepository;
 
     /**
      * Scheduler constructor.
-     * @param AppointmentInterface $appointment
+     * @param AppointmentAcceptable $acceptableAppointment
+     * @param AppointmentRepository $appointmentRepository
      */
     public function __construct(
-        AppointmentInterface $appointment
+        AppointmentAcceptable $acceptableAppointment,
+        AppointmentRepository $appointmentRepository
     ) {
-        $this->appointment = $appointment;
+        $this->acceptableAppointment = $acceptableAppointment;
+        $this->appointmentRepository = $appointmentRepository;
     }
 
     /**
@@ -31,6 +38,8 @@ class Scheduler
      */
     public function newAppointment($data)
     {
-        return $this->appointment->new($data);
+        if ($this->acceptableAppointment->isAcceptable($data)) {
+            return true;
+        }
     }
 }
