@@ -21,6 +21,13 @@ class AppointmentAcceptable
     protected $appointmentDuration = 120;
 
     /**
+     * The time between appointments in minutes.
+     *
+     * @var int $appointmentTimeBetween
+     */
+    protected $appointmentTimeBetween = 15;
+
+    /**
      * @var Appointment $appointment
      */
     protected $appointment;
@@ -61,17 +68,25 @@ class AppointmentAcceptable
 
         if ($validated['type'] === "success") {
 
-            $this->setAppointment(
-                (new Appointment())
-                    ->setFullName($data['fullName'])
-                    ->setEmail($data['email'])
-                    ->setPhone($data['phone'])
-                    ->setDatetime(
-                        DateTime::createFromFormat("Y-m-d\TH:i", $data['datetime'])
-                    )
-            );
+            $appointment = new Appointment();
+            $appointment
+                ->setFullName($data['fullName'])
+                ->setEmail($data['email'])
+                ->setPhone($data['phone'])
+                ->setDatetime(DateTime::createFromFormat("Y-m-d\TH:i", $data['datetime']))
+                ->setCreatedAt((new DateTime()))
+                ->setCancelled(0)
 
-            return true;
+            ;
+
+            $this->appointment = $appointment;
+
+            // Check if appointment exists
+            // or appointment is in range of the appointment duration.
+            // Take the appointment tie in between in account.
+            // TODO: Cancel appointment (customer)
+
+            $this->repository->save($this->appointment);
         }
 
         return $validated;
@@ -127,6 +142,25 @@ class AppointmentAcceptable
     public function setAppointment(Appointment $appointment): AppointmentAcceptable
     {
         $this->appointment = $appointment;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAppointmentTimeBetween(): int
+    {
+        return $this->appointmentTimeBetween;
+    }
+
+    /**
+     * @param int $appointmentTimeBetween
+     * @return AppointmentAcceptable
+     */
+    public function setAppointmentTimeBetween(int $appointmentTimeBetween): AppointmentAcceptable
+    {
+        $this->appointmentTimeBetween = $appointmentTimeBetween;
 
         return $this;
     }

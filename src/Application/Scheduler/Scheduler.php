@@ -38,8 +38,6 @@ class Scheduler
      */
     public function newAppointment($data)
     {
-        if ($this->acceptableAppointment->isAcceptable($data)) {
-            return true;
-        }
+        return $this->acceptableAppointment->isAcceptable($data);
     }
 }

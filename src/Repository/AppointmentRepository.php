@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Appointment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -14,9 +15,32 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class AppointmentRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
-    {
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    /**
+     * AppointmentRepository constructor.
+     * @param RegistryInterface $registry
+     * @param EntityManagerInterface $entityManager
+     */
+    public function __construct(
+        RegistryInterface $registry,
+        EntityManagerInterface $entityManager
+    ) {
+        $this->entityManager = $entityManager;
+
         parent::__construct($registry, Appointment::class);
+    }
+
+    /**
+     * @param Appointment $appointment
+     */
+    public function save(Appointment $appointment)
+    {
+        $this->entityManager->persist($appointment);
+        $this->entityManager->flush();
     }
 
     // /**
