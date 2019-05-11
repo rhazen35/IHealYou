@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Application\Scheduler\Scheduler;
-use DateTime;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,10 +18,12 @@ class HomeController extends AbstractController
 
     /**
      * HomeController constructor.
+     *
      * @param Scheduler $scheduler
      */
-    public function __construct(Scheduler $scheduler)
-    {
+    public function __construct(
+        Scheduler $scheduler
+    ) {
         $this->scheduler = $scheduler;
     }
 
@@ -42,10 +44,11 @@ class HomeController extends AbstractController
      * @Route("/appointment/new", name="new_appointment", methods={"POST"});
      * @param Request $request
      * @return mixed
+     * @throws Exception
      */
     public function newAppointment(Request $request)
     {
-        $response = $this->scheduler->newAppointment(json_decode($request->getContent(), true)['data']);
+        $response = $this->scheduler->newAppointment($request);
 
         return new JsonResponse(array('data' => $response));
     }

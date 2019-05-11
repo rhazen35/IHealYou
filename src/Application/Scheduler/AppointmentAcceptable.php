@@ -4,8 +4,6 @@ namespace App\Application\Scheduler;
 
 use App\Entity\Appointment;
 use App\Repository\AppointmentRepository;
-use DatePeriod;
-use DateTime;
 
 /**
  * Class AppointmentAcceptable
@@ -14,155 +12,60 @@ use DateTime;
 class AppointmentAcceptable
 {
     /**
-     * The duration of an appointment in minutes.
-     *
-     * @var int $appointmentDuration
+     * @var ValidateFields
      */
-    protected $appointmentDuration = 120;
+    protected $validateFields;
 
     /**
-     * The time between appointments in minutes.
-     *
-     * @var int $appointmentTimeBetween
+     * @var array $validated
      */
-    protected $appointmentTimeBetween = 15;
-
-    /**
-     * @var Appointment $appointment
-     */
-    protected $appointment;
-
-    /**
-     * The period in which the appointment date falls.
-     *
-     * @var DatePeriod $period.
-     */
-    protected $period;
+    protected $validated;
 
     /**
      * @var AppointmentRepository
      */
-    private $repository;
-
-    /**
-     * @var ValidateFields
-     */
-    private $validateFields;
+    private $appointmentRepository;
 
     /**
      * AppointmentAcceptable constructor.
-     * @param AppointmentRepository $repository
+     *
      * @param ValidateFields $validateFields
+     * @param AppointmentRepository $appointmentRepository
      */
     public function __construct(
-        AppointmentRepository $repository,
-        ValidateFields $validateFields
+        ValidateFields $validateFields,
+        AppointmentRepository $appointmentRepository
     ) {
-        $this->repository = $repository;
         $this->validateFields = $validateFields;
-    }
-
-    public function isAcceptable($data)
-    {
-        $validated = $this->validateFields->validate($data);
-
-        if ($validated['type'] === "success") {
-
-            $appointment = new Appointment();
-            $appointment
-                ->setFullName($data['fullName'])
-                ->setEmail($data['email'])
-                ->setPhone($data['phone'])
-                ->setDatetime(DateTime::createFromFormat("Y-m-d\TH:i", $data['datetime']))
-                ->setCreatedAt((new DateTime()))
-                ->setCancelled(0)
-
-            ;
-
-            $this->appointment = $appointment;
-
-            // Check if appointment exists
-            // or appointment is in range of the appointment duration.
-            // Take the appointment tie in between in account.
-            // TODO: Cancel appointment (customer)
-
-            $this->repository->save($this->appointment);
-        }
-
-        return $validated;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAppointmentDuration(): int
-    {
-        return $this->appointmentDuration;
-    }
-
-    /**
-     * @param int $appointmentDuration
-     * @return AppointmentAcceptable
-     */
-    public function setAppointmentDuration(int $appointmentDuration): AppointmentAcceptable
-    {
-        $this->appointmentDuration = $appointmentDuration;
-
-        return $this;
-    }
-
-    /**
-     * @return DatePeriod
-     */
-    public function getPeriod(): DatePeriod
-    {
-        return $this->period;
-    }
-
-    /**
-     * @param DatePeriod $period
-     */
-    public function setPeriod(DatePeriod $period): void
-    {
-        $this->period = $period;
-    }
-
-    /**
-     * @return Appointment
-     */
-    public function getAppointment(): Appointment
-    {
-        return $this->appointment;
+        $this->appointmentRepository = $appointmentRepository;
     }
 
     /**
      * @param Appointment $appointment
-     * @return AppointmentAcceptable
+     * @return bool
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function setAppointment(Appointment $appointment): AppointmentAcceptable
+    public function isAcceptable(Appointment $appointment): bool
     {
-        $this->appointment = $appointment;
+        $validated = $this->validateFields->validate($appointment);
+        $this->validated = $validated;
 
-        return $this;
+        if ($validated['type'] === "success") {
+
+            // or appointment is in range of the appointment duration.
+            // Take the appointment tie in between in account.
+            // TODO: Cancel appointment (customer)
+            return true;
+        }
+        return false;
     }
 
     /**
-     * @return int
+     * @return array
      */
-    public function getAppointmentTimeBetween(): int
+    public function getValidated(): array
     {
-        return $this->appointmentTimeBetween;
-    }
-
-    /**
-     * @param int $appointmentTimeBetween
-     * @return AppointmentAcceptable
-     */
-    public function setAppointmentTimeBetween(int $appointmentTimeBetween): AppointmentAcceptable
-    {
-        $this->appointmentTimeBetween = $appointmentTimeBetween;
-
-        return $this;
+        return $this->validated;
     }
 
 }

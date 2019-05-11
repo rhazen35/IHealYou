@@ -4,7 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Appointment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -19,6 +21,10 @@ class AppointmentRepository extends ServiceEntityRepository
      * @var EntityManagerInterface
      */
     private $entityManager;
+    /**
+     * @var QueryBuilder
+     */
+    private $queryBuilder;
 
     /**
      * AppointmentRepository constructor.
@@ -30,6 +36,7 @@ class AppointmentRepository extends ServiceEntityRepository
         EntityManagerInterface $entityManager
     ) {
         $this->entityManager = $entityManager;
+        $this->queryBuilder = $entityManager->createQueryBuilder();
 
         parent::__construct($registry, Appointment::class);
     }
@@ -43,32 +50,37 @@ class AppointmentRepository extends ServiceEntityRepository
         $this->entityManager->flush();
     }
 
-    // /**
-    //  * @return Appointment[] Returns an array of Appointment objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param $dateFrom
+     * @param $dateTo
+     * @return Appointment[] Returns an array of Appointment objects
+     */
+    public function findInDay($dateFrom, $dateTo)
     {
         return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere($this->queryBuilder->expr()->between('a.datetime', ':date_from', ':date_to'))
+            ->setParameter('date_from', $dateFrom, Type::DATETIME)
+            ->setParameter('date_to', $dateTo, Type::DATETIME)
+            ->orderBy('a.datetime', 'ASC')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Appointment
+
+    /**
+     * @param $dateTime
+     * @return Appointment|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findOneByDateTime($dateTime): ?Appointment
     {
         return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('a.datetime = :val')
+            ->setParameter('val', $dateTime)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
+
 }
