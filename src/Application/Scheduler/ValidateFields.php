@@ -4,6 +4,7 @@ namespace App\Application\Scheduler;
 
 use App\Entity\Appointment;
 use App\Repository\AppointmentRepository;
+use DateInterval;
 use DateTime;
 
 /**
@@ -16,22 +17,15 @@ class ValidateFields
      * @var AppointmentRepository
      */
     private $appointmentRepository;
-    /**
-     * @var OpeningHours
-     */
-    private $openingHours;
 
     /**
      * ValidateFields constructor.
      * @param AppointmentRepository $appointmentRepository
-     * @param OpeningHours $openingHours
      */
     public function __construct(
-        AppointmentRepository $appointmentRepository,
-        OpeningHours $openingHours
+        AppointmentRepository $appointmentRepository
     ) {
         $this->appointmentRepository = $appointmentRepository;
-        $this->openingHours = $openingHours;
     }
 
     /**
@@ -56,49 +50,29 @@ class ValidateFields
 
         } else {
 
+            $appointmentsInDayOfTheAppointment = $this->appointmentRepository->findInDay(
+                $appointment->getOpeningHourOfDayOfAppointment(),
+                $appointment->getClosingHourOfDayOfAppointment()
+            );
+
             $appointmentExists = $this->appointmentRepository->findOneByDateTime($dateTime);
-            $isAppointmentWithinOpeningHours = $this->isAppointmentWithinOpeningHours($appointment);
-            //$appointmentIsOverlapping = $this->dateTimeIsOverlapping($appointment);
+            $isInOpeningHours = $appointment->isInOpeningHours();
+            $isOverlapping = $appointment->isOverlapping($appointmentsInDayOfTheAppointment);
 
             if ($appointmentExists) {
                 $dateTime = false;
                 $response['subjects']['datetime'] = "The appointment for this date already exists!";
+            } else {
+
+                if (!$isInOpeningHours) {
+                    $dateTime = false;
+                    $response['subjects']['datetime'] = "The appointment is not within our opening hours!";
+                }
             }
         }
 
         $response['type'] = in_array(false, [$fullName, $email, $phone, $dateTime]) ? 'failed' : 'success';
 
         return $response;
-    }
-
-    public function isAppointmentWithinOpeningHours(Appointment $appointment)
-    {
-        $dateTime = $appointment->getDatetime();
-        $dayOfTheAppointment = $appointment->getDayOfTheAppointment();
-        $openingHours = $this->openingHours->{$dayOfTheAppointment};
-        /** @var DateTime $open */
-        $open = $openingHours['start'];
-        /** @var DateTime $close */
-        $close = $openingHours['end'];
-        $end = ($close->modify('- ' . $appointment->getAppointmentDuration() . ' minutes'));
-
-        $isWithin = $dateTime >= $open && $dateTime < $end;
-
-        die(var_dump($dayOfTheAppointment));
-
-    }
-
-    public function dateTimeIsOverlapping(Appointment $appointment)
-    {
-        $dateTime = $appointment->getDatetime();
-        $dateTime->format("Y-m-d");
-        $dateFrom = clone $dateTime;
-        $dateFrom->setTime(00,00,00);
-        $dateTo = clone $dateTime;
-        $dateTo->setTime(23,59,59);
-
-        $appointments = $this->appointmentRepository->findInDay($dateFrom, $dateTo);
-
-        die(var_dump($appointments));
     }
 }

@@ -2,9 +2,12 @@
 
 namespace App\Entity;
 
-use DatePeriod;
+use App\Application\Scheduler\OpeningHours;
+use DateInterval;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AppointmentRepository")
@@ -71,6 +74,86 @@ class Appointment
      * @var string $dayOfTheAppointment
      */
     protected $dayOfTheAppointment;
+
+    /**
+     * @var OpeningHours
+     */
+    private $openingHours;
+
+    /**
+     * Appointment constructor.
+     * @throws Exception
+     */
+    public function __construct()
+    {
+        $this->openingHours = new OpeningHours();
+    }
+
+    /**
+     * @param OpeningHours $openingHours
+     * @return bool
+     */
+    public function isInOpeningHours(): bool
+    {
+        $dateOfTheAppointment = $this->getDatetime();
+        $appointmentDuration = $this->getAppointmentDuration();
+
+        $open = $this->getOpeningHourOfDayOfAppointment();
+        $close = $this->getClosingHourOfDayOfAppointment();
+
+        $lastAppointment = clone $close;
+        $lastAppointment->sub(DateInterval::createFromDateString($appointmentDuration . ' minutes'));
+
+        $isWithin = $dateOfTheAppointment >= $open && $dateOfTheAppointment <= $lastAppointment;
+
+        return $isWithin;
+    }
+
+    public function isOverLapping($appointmentsInDayOfTheAppointment)
+    {
+        $dateOfTheAppointment = $this->getDatetime();
+
+        dd($appointmentsInDayOfTheAppointment);
+
+        return true;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getOpeningHourOfDayOfAppointment(): DateTime
+    {
+        $timeOfOpen = $this->openingHours->{$this->getDayOfTheAppointment()}['start'];
+
+        /** @var DateTime $open */
+        $open = clone $this->getDateTime();
+        $open->setTime($timeOfOpen[0], $timeOfOpen[1], $timeOfOpen[2]);
+
+        return $open;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getClosingHourOfDayOfAppointment(): DateTime
+    {
+        $timeOfClose = $this->openingHours->{$this->getDayOfTheAppointment()}['end'];
+
+        /** @var DateTime $close */
+        $close = clone $this->getDateTime();
+        $close->setTime($timeOfClose[0], $timeOfClose[1], $timeOfClose[2]);
+
+        return $close;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTime()
+    {
+        $datetime = clone $this->getDatetime();
+        return $datetime->format('H:i:s');
+    }
 
     /**
      * @return int|null
@@ -218,7 +301,7 @@ class Appointment
      */
     public function getAppointmentDuration(): int
     {
-        return $this->appointmentDuration;
+        return $this->appointmentDuration + $this->getAppointmentTimeBetween();
     }
 
     /**

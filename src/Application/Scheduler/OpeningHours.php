@@ -53,8 +53,8 @@ class OpeningHours
     public function __construct()
     {
         $default = [
-            'start' => new DateTime("09:00:00"),
-            'end' => new DateTime("17:00:00")
+            'start' => [9, 00, 00],
+            'end' => [17, 00, 00]
         ];
 
         $this->monday = $default;
