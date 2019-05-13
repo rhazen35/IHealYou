@@ -60,14 +60,19 @@ class ValidateFields
             $isOverlapping = $appointment->isOverlapping($appointmentsInDayOfTheAppointment);
 
             if ($appointmentExists) {
+
                 $dateTime = false;
                 $response['subjects']['datetime'] = "The appointment for this date already exists!";
-            } else {
 
-                if (!$isInOpeningHours) {
-                    $dateTime = false;
-                    $response['subjects']['datetime'] = "The appointment is not within our opening hours!";
-                }
+            } elseif (!$isInOpeningHours) {
+
+                $dateTime = false;
+                $response['subjects']['datetime'] = "The appointment is not within our opening hours!";
+
+            } elseif ($isOverlapping) {
+
+                $dateTime = false;
+                $response['subjects']['datetime'] = "The appointment is already scheduled!";
             }
         }
 
