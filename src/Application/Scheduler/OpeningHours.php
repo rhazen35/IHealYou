@@ -2,7 +2,6 @@
 
 namespace App\Application\Scheduler;
 
-use DateTime;
 use Exception;
 
 /**

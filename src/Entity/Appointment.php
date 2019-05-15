@@ -104,9 +104,9 @@ class Appointment
         $lastAppointment = clone $close;
         $lastAppointment->sub(DateInterval::createFromDateString($appointmentDuration . ' minutes'));
 
-        $isWithin = $dateOfTheAppointment >= $open && $dateOfTheAppointment <= $lastAppointment;
+        $isWithinOpeningHours = $dateOfTheAppointment >= $open && $dateOfTheAppointment <= $lastAppointment;
 
-        return $isWithin;
+        return $isWithinOpeningHours;
     }
 
     /**
@@ -124,7 +124,6 @@ class Appointment
                 return true;
             }
         }
-
         return false;
     }
 

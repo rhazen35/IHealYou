@@ -4,8 +4,7 @@ namespace App\Application\Scheduler;
 
 use App\Entity\Appointment;
 use App\Repository\AppointmentRepository;
-use DateInterval;
-use DateTime;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * Class ValidateFields
@@ -31,7 +30,7 @@ class ValidateFields
     /**
      * @param Appointment $appointment
      * @return mixed
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function validate(Appointment $appointment): array
     {

@@ -21,6 +21,7 @@ class AppointmentRepository extends ServiceEntityRepository
      * @var EntityManagerInterface
      */
     private $entityManager;
+
     /**
      * @var QueryBuilder
      */

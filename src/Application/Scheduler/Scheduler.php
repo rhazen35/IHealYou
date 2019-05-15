@@ -18,22 +18,31 @@ class Scheduler
      * @var AppointmentAcceptable
      */
     private $acceptableAppointment;
+
     /**
      * @var AppointmentRepository
      */
     private $appointmentRepository;
 
     /**
+     * @var CalendarBuilder
+     */
+    private $calendarBuilder;
+
+    /**
      * Scheduler constructor.
      * @param AppointmentAcceptable $acceptableAppointment
      * @param AppointmentRepository $appointmentRepository
+     * @param CalendarBuilder $calendarBuilder
      */
     public function __construct(
         AppointmentAcceptable $acceptableAppointment,
-        AppointmentRepository $appointmentRepository
+        AppointmentRepository $appointmentRepository,
+        CalendarBuilder $calendarBuilder
     ) {
         $this->acceptableAppointment = $acceptableAppointment;
         $this->appointmentRepository = $appointmentRepository;
+        $this->calendarBuilder = $calendarBuilder;
     }
 
     /**
