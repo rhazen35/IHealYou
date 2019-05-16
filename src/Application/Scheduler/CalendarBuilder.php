@@ -2,6 +2,8 @@
 
 namespace App\Application\Scheduler;
 
+use DateInterval;
+use DateTime;
 use Exception;
 
 /**
@@ -32,6 +34,7 @@ class CalendarBuilder
     /**
      * BuildCalender constructor.
      * @param Calendar $calendar
+     * @throws Exception
      */
     public function __construct(Calendar $calendar)
     {
@@ -45,7 +48,19 @@ class CalendarBuilder
      */
     public function buildMonth()
     {
-        die(var_dump($this->calendar->getWeekNumbersOfCurrentMonth()));
+        $weeks = [];
+
+        $firstMonday = new DateTime("first monday of this month");
+        $dayOfMonday = (int)$firstMonday->format("d");
+
+        if ((int)$firstMonday->format("d") !== 1) {
+            $mondayBeforeFirstMonday = clone $firstMonday;
+            $mondayBeforeFirstMonday->sub(new DateInterval('P7D'));
+        }
+
+        $lastMonday = new DateTime("last monday of this month");
+
+        dd($lastMonday);
     }
 
     public function buildWeek()
