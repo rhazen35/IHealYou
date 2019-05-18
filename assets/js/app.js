@@ -18,3 +18,6 @@ new menu.default();
 
 const appointment = require('./scheduler/appointment');
 new appointment.default();
+
+const calendar = require('./scheduler/calendar');
+new calendar.default();

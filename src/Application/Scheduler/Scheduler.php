@@ -30,18 +30,26 @@ class Scheduler
     private $calendarBuilder;
 
     /**
+     * @var Calendar
+     */
+    private $calendar;
+
+    /**
      * Scheduler constructor.
      * @param AppointmentAcceptable $acceptableAppointment
      * @param AppointmentRepository $appointmentRepository
+     * @param Calendar $calendar
      * @param CalendarBuilder $calendarBuilder
      */
     public function __construct(
         AppointmentAcceptable $acceptableAppointment,
         AppointmentRepository $appointmentRepository,
+        Calendar $calendar,
         CalendarBuilder $calendarBuilder
     ) {
         $this->acceptableAppointment = $acceptableAppointment;
         $this->appointmentRepository = $appointmentRepository;
+        $this->calendar = $calendar;
         $this->calendarBuilder = $calendarBuilder;
     }
 
@@ -72,5 +80,20 @@ class Scheduler
         }
 
         return $this->acceptableAppointment->getValidated();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getCalendarMonth()
+    {
+        $calendarMonthDays = $this->calendar->getMonthDaysForCalendar();
+
+        $start = $calendarMonthDays->getStartDate();
+        $end = $calendarMonthDays->getEndDate();
+
+        $appointmentsInCalendarMonth = $this->appointmentRepository->findBetweenDays($start, $end);
+
+        return $this->calendarBuilder->buildMonthWithAppointments($appointmentsInCalendarMonth);
     }
 }

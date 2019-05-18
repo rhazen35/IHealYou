@@ -44,9 +44,7 @@ class Appointment {
                 }
             );
 
-            response.then((data) => {
-
-                console.log(data);
+                response.then((data) => {
 
                 this.removeErrors();
                 this.loader(false);

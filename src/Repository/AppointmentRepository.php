@@ -56,7 +56,7 @@ class AppointmentRepository extends ServiceEntityRepository
      * @param $dateTo
      * @return Appointment[] Returns an array of Appointment objects
      */
-    public function findInDay($dateFrom, $dateTo)
+    public function findBetweenDays($dateFrom, $dateTo)
     {
         return $this->createQueryBuilder('a')
             ->andWhere($this->queryBuilder->expr()->between('a.datetime', ':date_from', ':date_to'))

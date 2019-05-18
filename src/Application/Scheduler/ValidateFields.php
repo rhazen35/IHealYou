@@ -49,7 +49,7 @@ class ValidateFields
 
         } else {
 
-            $appointmentsInDayOfTheAppointment = $this->appointmentRepository->findInDay(
+            $appointmentsInDayOfTheAppointment = $this->appointmentRepository->findBetweenDays(
                 $appointment->getOpeningHourOfDayOfAppointment(),
                 $appointment->getClosingHourOfDayOfAppointment()
             );

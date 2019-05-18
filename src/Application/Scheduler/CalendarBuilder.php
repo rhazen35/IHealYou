@@ -39,28 +39,43 @@ class CalendarBuilder
     public function __construct(Calendar $calendar)
     {
         $this->calendar = $calendar;
-
-        $this->buildMonth();
     }
 
     /**
      * @throws Exception
      */
-    public function buildMonth()
+    public function buildMonthWithAppointments($appointments)
     {
-        $weeks = [];
+        $monthDaysForCalendar = $this->calendar->getMonthDaysForCalendar();
+        $totalDays = $this->calendar->getTotalDaysFromPeriod($monthDaysForCalendar);
 
-        $firstMonday = new DateTime("first monday of this month");
-        $dayOfMonday = (int)$firstMonday->format("d");
 
-        if ((int)$firstMonday->format("d") !== 1) {
-            $mondayBeforeFirstMonday = clone $firstMonday;
-            $mondayBeforeFirstMonday->sub(new DateInterval('P7D'));
+        $html = '<div class="month grid-container theme-default">';
+
+        $html .= '<div class="mask top"></div>';
+        $html .= '<div class="mask left"></div>';
+
+        $html .= '<div class="content">';
+        $html .= '<div class="cal">';
+
+        foreach ($monthDaysForCalendar as $day) {
+
+            $html .= '<div class="day">';
+            $html .= $day->format('d');
+            $html .= '</div>';
         }
 
-        $lastMonday = new DateTime("last monday of this month");
+        $html .= '</div>';
+        $html .= '</div>';
 
-        dd($lastMonday);
+        $html .= '<div class="mask right"></div>';
+        $html .= '<div class="mask bottom"></div>';
+
+        $html .= '</div>';
+
+        $html .= '<div id="light"></div>';
+
+        return $html;
     }
 
     public function buildWeek()

@@ -52,4 +52,17 @@ class HomeController extends AbstractController
 
         return new JsonResponse(array('data' => $response));
     }
+
+    /**
+     * @Route("/calendar/month", name="calendar?month", methods={"GET"});
+     * @param Request $request
+     * @return mixed
+     * @throws Exception
+     */
+    public function calendarMonth(Request $request)
+    {
+        $response = $this->scheduler->getCalendarMonth();
+
+        return new JsonResponse(array('data' => $response));
+    }
 }
