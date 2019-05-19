@@ -3,6 +3,7 @@
 namespace App\Application\Scheduler;
 
 use App\Entity\Appointment;
+use App\Presenter\Scheduler\Calendar\CalendarPresenter;
 use App\Repository\AppointmentRepository;
 use DateTime;
 use Exception;
@@ -35,22 +36,30 @@ class Scheduler
     private $calendar;
 
     /**
+     * @var CalendarPresenter
+     */
+    private $calendarPresenter;
+
+    /**
      * Scheduler constructor.
      * @param AppointmentAcceptable $acceptableAppointment
      * @param AppointmentRepository $appointmentRepository
      * @param Calendar $calendar
      * @param CalendarBuilder $calendarBuilder
+     * @param CalendarPresenter $calendarPresenter
      */
     public function __construct(
         AppointmentAcceptable $acceptableAppointment,
         AppointmentRepository $appointmentRepository,
         Calendar $calendar,
-        CalendarBuilder $calendarBuilder
+        CalendarBuilder $calendarBuilder,
+        CalendarPresenter $calendarPresenter
     ) {
         $this->acceptableAppointment = $acceptableAppointment;
         $this->appointmentRepository = $appointmentRepository;
         $this->calendar = $calendar;
         $this->calendarBuilder = $calendarBuilder;
+        $this->calendarPresenter = $calendarPresenter;
     }
 
     /**
@@ -94,6 +103,8 @@ class Scheduler
 
         $appointmentsInCalendarMonth = $this->appointmentRepository->findBetweenDays($start, $end);
 
-        return $this->calendarBuilder->buildMonthWithAppointments($appointmentsInCalendarMonth);
+        $monthWithAppointments = $this->calendarBuilder->buildMonthWithAppointments($appointmentsInCalendarMonth);
+
+        return $this->calendarPresenter->presentMonthWithAppointments($monthWithAppointments);
     }
 }

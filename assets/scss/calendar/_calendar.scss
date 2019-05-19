@@ -1,5 +1,67 @@
 .calendar {
-  width:90%;
+  width:100%;
   margin:0 auto;
-  margin-top:1rem;
+  background: $platinum;
+  border:5px solid $platinum;
+  border-top:none;
+
+  .month {
+    display:grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: auto;
+    grid-gap: 5px;
+
+    .week {
+      display:grid;
+      grid-template-rows: 1fr;
+      grid-template-columns: repeat(8, 1fr);
+      grid-gap: 5px;
+
+      .week-number {
+        font-size:80%;
+      }
+
+      .day {
+        display:flex;
+        flex-flow: row wrap;
+        justify-content:space-between;
+        padding:1rem;
+        background: $white;
+
+        &:hover > .hours {
+          display:flex;
+        }
+
+        .day-number {
+          flex:1;
+        }
+
+        .hours {
+          position:absolute;
+          display:none;
+          width:10rem;
+          flex-flow: column;
+          justify-content: flex-start;
+
+          .hour {
+            display:flex;
+            flex-flow: row wrap;
+            justify-content: space-between;
+            padding:0.1rem;
+            color: $white;
+            font-size:70%;
+            border-bottom:1px solid $white;
+          }
+
+          .green {
+            background: #5cd65c;
+          }
+
+          .red {
+            background: lighten(red, 20%);
+          }
+        }
+      }
+    }
+  }
 }

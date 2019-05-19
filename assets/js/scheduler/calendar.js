@@ -32,13 +32,6 @@ class Calendar {
 
                 calendar.innerHTML = html;
 
-            }).then(() => {
-
-                const light = document.getElementById('light')
-                document.addEventListener('mousemove', e => {
-                    light.style.top = e.pageY + "px"
-                    light.style.left = e.pageX + "px"
-                })
             });
         }
     }

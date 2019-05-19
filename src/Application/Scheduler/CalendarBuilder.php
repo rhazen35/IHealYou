@@ -2,7 +2,9 @@
 
 namespace App\Application\Scheduler;
 
+use App\Entity\Appointment;
 use DateInterval;
+use DatePeriod;
 use DateTime;
 use Exception;
 
@@ -11,137 +13,173 @@ use Exception;
  */
 class CalendarBuilder
 {
-    /**
-     * @var string;
-     */
-    public $month;
-
-    /**
-     * @var string
-     */
-    public $week;
-
-    /**
-     * @var string
-     */
-    public $day;
 
     /**
      * @var Calendar
      */
-    public $calendar;
+    private $calendar;
+
+    /**
+     * @var Appointment[]
+     */
+    public $appointments;
+
+    /**
+     * @var OpeningHours
+     */
+    private $openingHours;
+
+    /**
+     * @var Appointment
+     */
+    private $appointment;
 
     /**
      * BuildCalender constructor.
      * @param Calendar $calendar
+     * @param OpeningHours $openingHours
      * @throws Exception
      */
-    public function __construct(Calendar $calendar)
-    {
+    public function __construct(
+        Calendar $calendar,
+        OpeningHours $openingHours
+    ) {
         $this->calendar = $calendar;
+        $this->openingHours = $openingHours;
+        $this->appointment = new Appointment();
     }
 
     /**
+     * @param Appointment[] $appointments
+     * @return array
      * @throws Exception
      */
     public function buildMonthWithAppointments($appointments)
     {
+        $this->appointments = $appointments;
         $monthDaysForCalendar = $this->calendar->getMonthDaysForCalendar();
-        $totalDays = $this->calendar->getTotalDaysFromPeriod($monthDaysForCalendar);
 
+        $month = [];
 
-        $html = '<div class="month grid-container theme-default">';
-
-        $html .= '<div class="mask top"></div>';
-        $html .= '<div class="mask left"></div>';
-
-        $html .= '<div class="content">';
-        $html .= '<div class="cal">';
-
+        /** @var DateTime $day */
         foreach ($monthDaysForCalendar as $day) {
 
-            $html .= '<div class="day">';
-            $html .= $day->format('d');
-            $html .= '</div>';
+            $weekNumber = $day->format('W');
+            $dayDate = $day->format('Y-m-d');
+
+            $month[$weekNumber][$dayDate] = [];
+            $month[$weekNumber][$dayDate]['datetime'] = $day;
+
+            $dayName = strtolower($day->format('l'));
+
+            $timeOfOpen = $this->openingHours->{$dayName}['start'];
+            $open = clone $day;
+            $open->setTime($timeOfOpen[0], $timeOfOpen[1], $timeOfOpen[2]);
+
+            $timeOfClose = $this->openingHours->{$dayName}['end'];
+            $close = clone $day;
+            $close->setTime($timeOfClose[0], $timeOfClose[1], $timeOfClose[2]);
+            $close->modify('+1 hour');
+
+            $interval = new DateInterval('PT1H');
+            $openingHoursRange = new DatePeriod($open, $interval, $close);
+
+            /** @var DateTime $openingHour */
+            foreach ($openingHoursRange as $openingHour) {
+
+                $hour = $openingHour->format("H");
+                $isFree = true;
+
+                /** @var Appointment $appointment */
+                foreach ($this->getAppointmentsInDay($day) as $appointment) {
+
+                    /** @var DateTime $dateTime */
+                    $dateTime = $appointment->getDatetime();
+
+                    if ($dateTime->format('H') === $hour) {
+                        $isFree = false;
+
+                        $end = clone $dateTime;
+                        $end->add(DateInterval::createFromDateString($appointment->getAppointmentDuration() . " minutes"));
+                        $month[$weekNumber][$dayDate]['hours'][$hour]['start'] = $dateTime->format('H:i');
+                        $month[$weekNumber][$dayDate]['hours'][$hour]['end'] = $end->format('H:i');
+                    }
+                }
+
+                if ($isFree) {
+
+                    // Get the nearest appointment before the current hour.
+                    $appointmentBefore = $this->getAppointmentBeforeOrAfterHour($dayDate, $openingHour, true);
+                    // Get the nearest appointment after the current hour.
+                    $appointmentAfter = $this->getAppointmentBeforeOrAfterHour($dayDate, $openingHour, false);
+
+                    if ($appointmentBefore && $appointmentAfter) {
+
+                        /** @var DateTime $beforeTime */
+                        $beforeTime = clone $appointmentBefore->getDatetime();
+                        $beforeTime->add(DateInterval::createFromDateString($this->appointment->getAppointmentDuration() . " minutes"));
+
+                        $difference = $beforeTime->diff($appointmentAfter->getDatetime());
+                        if ($difference->i < $this->appointment->getAppointmentDuration()) {
+                            $isFree = false;
+                        }
+                    }
+
+                    // Check if the appointment before and the appointment after have a duration in minutes
+                    // equal to the appointment duration.
+                }
+
+                $month[$weekNumber][$dayDate]['hours'][$hour]['is_free'] = $isFree;
+            }
         }
 
-        $html .= '</div>';
-        $html .= '</div>';
-
-        $html .= '<div class="mask right"></div>';
-        $html .= '<div class="mask bottom"></div>';
-
-        $html .= '</div>';
-
-        $html .= '<div id="light"></div>';
-
-        return $html;
-    }
-
-    public function buildWeek()
-    {
-
-    }
-
-    public function buildDay()
-    {
-
+        return $month;
     }
 
     /**
-     * @return string
+     * @param DateTime $day
+     * @return array|bool
      */
-    public function getMonth(): string
+    public function getAppointmentsInDay(DateTime $day)
     {
-        return $this->month;
+        $appointmentsInDay = [];
+
+        foreach ($this->appointments as $appointment) {
+            if ($appointment->getDatetime()->format('Y-m-d') === $day->format('Y-m-d')) {
+                $appointmentsInDay[] = $appointment;
+            }
+        }
+
+        return $appointmentsInDay ?? false;
     }
 
     /**
-     * @param string $month
-     * @return CalendarBuilder
+     * @param DateTime $openingHour
+     * @param bool $before
+     * @return Appointment|bool
      */
-    public function setMonth(string $month): CalendarBuilder
+    public function getAppointmentBeforeOrAfterHour($dayDate, DateTime $openingHour, $before = true)
     {
-        $this->month = $month;
+        $hour = clone $openingHour;
 
-        return $this;
-    }
+        if ($before) {
+            $hour->modify('-1 hour');
+        } else {
+            $hour->modify('+1 hour');
+        }
 
-    /**
-     * @return string
-     */
-    public function getWeek(): string
-    {
-        return $this->week;
-    }
+        $hour = $hour->format('H');
 
-    /**
-     * @param string $week
-     * @return CalendarBuilder
-     */
-    public function setWeek(string $week): CalendarBuilder
-    {
-        $this->week = $week;
+        foreach ($this->appointments as $appointment) {
 
-        return $this;
-    }
+            $appointmentDate = clone $appointment->getDatetime();
 
-    /**
-     * @return string
-     */
-    public function getDay(): string
-    {
-        return $this->day;
-    }
+            if ($dayDate === $appointmentDate->format('Y-m-d') && $appointmentDate->format('H') === $hour) {
 
-    /**
-     * @param string $day
-     * @return CalendarBuilder
-     */
-    public function setDay(string $day): CalendarBuilder
-    {
-        $this->day = $day;
+                return clone $appointment;
+            }
+        }
 
-        return $this;
+        return false;
     }
 }
