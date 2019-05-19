@@ -78,7 +78,7 @@ class Appointment
     /**
      * @var OpeningHours
      */
-    private $openingHours;
+    public $openingHours;
 
     /**
      * Appointment constructor.

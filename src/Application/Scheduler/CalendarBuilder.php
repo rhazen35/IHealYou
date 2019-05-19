@@ -67,9 +67,6 @@ class CalendarBuilder
             $weekNumber = $day->format('W');
             $dayDate = $day->format('Y-m-d');
 
-            $month[$weekNumber][$dayDate] = [];
-            $month[$weekNumber][$dayDate]['datetime'] = $day;
-
             $dayName = strtolower($day->format('l'));
 
             $timeOfOpen = $this->openingHours->{$dayName}['start'];
@@ -88,6 +85,7 @@ class CalendarBuilder
             foreach ($openingHoursRange as $openingHour) {
 
                 $hour = $openingHour->format("H");
+                $displayTime = $openingHour->format('H:i');
                 $isFree = true;
 
                 /** @var Appointment $appointment */
@@ -97,21 +95,23 @@ class CalendarBuilder
                     $dateTime = $appointment->getDatetime();
 
                     if ($dateTime->format('H') === $hour) {
+
                         $isFree = false;
 
                         $end = clone $dateTime;
                         $end->add(DateInterval::createFromDateString($appointment->getAppointmentDuration() . " minutes"));
-                        $month[$weekNumber][$dayDate]['hours'][$hour]['start'] = $dateTime->format('H:i');
-                        $month[$weekNumber][$dayDate]['hours'][$hour]['end'] = $end->format('H:i');
+
+                        $month[$weekNumber][$dayDate]['hours'][$displayTime]['start'] = $dateTime->format('H:i');
+                        $month[$weekNumber][$dayDate]['hours'][$displayTime]['end'] = $end->format('H:i');
+
+                        break;
                     }
                 }
 
-                if ($isFree) {
+                $appointmentBefore = $this->getAppointmentBeforeOrAfterHour($dayDate, $openingHour, true);
+                $appointmentAfter = $this->getAppointmentBeforeOrAfterHour($dayDate, $openingHour, false);
 
-                    // Get the nearest appointment before the current hour.
-                    $appointmentBefore = $this->getAppointmentBeforeOrAfterHour($dayDate, $openingHour, true);
-                    // Get the nearest appointment after the current hour.
-                    $appointmentAfter = $this->getAppointmentBeforeOrAfterHour($dayDate, $openingHour, false);
+                if ($isFree) {
 
                     if ($appointmentBefore && $appointmentAfter) {
 
@@ -119,17 +119,30 @@ class CalendarBuilder
                         $beforeTime = clone $appointmentBefore->getDatetime();
                         $beforeTime->add(DateInterval::createFromDateString($this->appointment->getAppointmentDuration() . " minutes"));
 
+                        $displayTime = $beforeTime->format('H:i');
+
                         $difference = $beforeTime->diff($appointmentAfter->getDatetime());
                         if ($difference->i < $this->appointment->getAppointmentDuration()) {
                             $isFree = false;
                         }
-                    }
 
-                    // Check if the appointment before and the appointment after have a duration in minutes
-                    // equal to the appointment duration.
+                    } elseif ($appointmentBefore && !$appointmentAfter) {
+
+                        $appointment = clone $appointmentBefore;
+                        $appointment->setDayOfTheAppointment($dayName);
+                        $appointment->openingHours = $this->openingHours;
+
+                        if (!$appointment->isInOpeningHours()) {
+                            $isFree = false;
+                        }
+                    }
+                } elseif (!$isFree && $appointmentBefore) {
+
+
                 }
 
-                $month[$weekNumber][$dayDate]['hours'][$hour]['is_free'] = $isFree;
+                $month[$weekNumber][$dayDate]['datetime'] = $day;
+                $month[$weekNumber][$dayDate]['hours'][$displayTime]['is_free'] = $isFree;
             }
         }
 
@@ -154,6 +167,7 @@ class CalendarBuilder
     }
 
     /**
+     * @param $dayDate
      * @param DateTime $openingHour
      * @param bool $before
      * @return Appointment|bool
@@ -176,7 +190,7 @@ class CalendarBuilder
 
             if ($dayDate === $appointmentDate->format('Y-m-d') && $appointmentDate->format('H') === $hour) {
 
-                return clone $appointment;
+                return $appointment;
             }
         }
 

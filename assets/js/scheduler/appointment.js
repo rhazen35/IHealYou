@@ -1,4 +1,5 @@
 import Ajax from "../ajax/ajax";
+import Calendar from "./calendar";
 
 /**
  * Appointment Module.
@@ -55,6 +56,7 @@ class Appointment {
 
                } else if("success" === data.type) {
 
+                   new Calendar();
                    this.resetInputFields();
                    this.successCheckMark();
                    setTimeout(() => {
