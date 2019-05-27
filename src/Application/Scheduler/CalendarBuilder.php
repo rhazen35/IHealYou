@@ -136,11 +136,7 @@ class CalendarBuilder
                             $isFree = false;
                         }
                     }
-                } elseif (!$isFree && $appointmentBefore) {
-
-
                 }
-
                 $month[$weekNumber][$dayDate]['datetime'] = $day;
                 $month[$weekNumber][$dayDate]['hours'][$displayTime]['is_free'] = $isFree;
             }
