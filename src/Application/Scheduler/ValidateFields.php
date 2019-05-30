@@ -4,6 +4,7 @@ namespace App\Application\Scheduler;
 
 use App\Entity\Appointment;
 use App\Repository\AppointmentRepository;
+use DateTime;
 use Doctrine\ORM\NonUniqueResultException;
 
 /**
@@ -34,17 +35,32 @@ class ValidateFields
      */
     public function validate(Appointment $appointment): array
     {
+        $response = [];
+
         $fullName = $appointment->getFullName() ?? false;
         $email = $appointment->getEmail() ?? false;
         $phone = $appointment->getPhone() ?? false;
         $dateTime = $appointment->getDatetime() ?? false;
 
-        if (!$fullName) {$response['subjects']['fullName'] = "Please fill in your Full Name.";}
-        if (!$email) {$response['subjects']['email'] = "Please fill in your email address.";}
-        if (!$phone) {$response['subjects']['phone'] = "Please fill in your phone number.";}
+        $response['type'] = "failed";
+
+        if (!$fullName) {
+            $response['subjects']['fullName'] = "Please fill in your Full Name.";
+        }
+
+        if (!$email) {
+            $response['subjects']['email'] = "Please fill in your email address.";
+        }
+
+        if (!$phone) {
+            $response['subjects']['phone'] = "Please fill in your phone number.";
+        }
+
+        $response['type'] = $fullName && $email && $phone ? "success" : "failed";
 
         if (!$dateTime) {
 
+            $response['type'] = "failed";
             $response['subjects']['datetime'] = "Please choose a date and time.";
 
         } else {
@@ -54,29 +70,38 @@ class ValidateFields
                 $appointment->getClosingHourOfDayOfAppointment()
             );
 
+            if ($dateTime->format('Y-m-d') < (new DateTime())->format('Y-m-d')) {
+
+                $response['type'] = "failed";
+                $response['subjects']['datetime'] = "The appointment occurs in the past and can not be made!";
+                return $response;
+            }
+
             $appointmentExists = $this->appointmentRepository->findOneByDateTime($dateTime);
             $isInOpeningHours = $appointment->isInOpeningHours();
             $isOverlapping = $appointment->isOverlapping($appointmentsInDayOfTheAppointment);
 
             if ($appointmentExists) {
 
-                $dateTime = false;
+                $response['type'] = "failed";
                 $response['subjects']['datetime'] = "The appointment for this date already exists!";
+                return $response;
+            }
 
-            } elseif (!$isInOpeningHours) {
+            if (!$isInOpeningHours) {
 
-                $dateTime = false;
+                $response['type'] = "failed";
                 $response['subjects']['datetime'] = "The appointment is not within our opening hours!";
+                return $response;
+            }
 
-            } elseif ($isOverlapping) {
+            if ($isOverlapping) {
 
-                $dateTime = false;
+                $response['type'] = "failed";
                 $response['subjects']['datetime'] = "The appointment is already scheduled!";
+                return $response;
             }
         }
-
-        $response['type'] = in_array(false, [$fullName, $email, $phone, $dateTime]) ? 'failed' : 'success';
-
         return $response;
     }
 }

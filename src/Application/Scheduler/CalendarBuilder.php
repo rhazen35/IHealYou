@@ -56,89 +56,161 @@ class CalendarBuilder
      */
     public function buildMonthWithAppointments($appointments)
     {
+        // Set the appointments.
         $this->appointments = $appointments;
+        // Get the month days for the calendar.
         $monthDaysForCalendar = $this->calendar->getMonthDaysForCalendar();
 
         $month = [];
 
-        /** @var DateTime $day */
+        /**
+         * Loop through each day of the month.
+         *
+         * @var DateTime $day
+         */
         foreach ($monthDaysForCalendar as $day) {
 
+            // Set the week number.
             $weekNumber = $day->format('W');
+
+            // Set the date of the day (without the time)
             $dayDate = $day->format('Y-m-d');
 
+            // Set the day name.
             $dayName = strtolower($day->format('l'));
 
+            // Set the day's time of open.
             $timeOfOpen = $this->openingHours->{$dayName}['start'];
             $open = clone $day;
             $open->setTime($timeOfOpen[0], $timeOfOpen[1], $timeOfOpen[2]);
 
+            // Set the day's time of close.
             $timeOfClose = $this->openingHours->{$dayName}['end'];
             $close = clone $day;
             $close->setTime($timeOfClose[0], $timeOfClose[1], $timeOfClose[2]);
             $close->modify('+1 hour');
 
+            // Set the opening hours range with an interval of 1 hour.
             $interval = new DateInterval('PT1H');
             $openingHoursRange = new DatePeriod($open, $interval, $close);
 
-            /** @var DateTime $openingHour */
+            /**
+             * Loop through the opening hours, displaying only these hours.
+             *
+             * @var DateTime $openingHour
+             */
             foreach ($openingHoursRange as $openingHour) {
 
+                // Set the hour of the opening hour.
                 $hour = $openingHour->format("H");
+                // Set the display time of the opening hour.
                 $displayTime = $openingHour->format('H:i');
+                // Set is free to true, meaning the hour is open for appointments.
                 $isFree = true;
 
-                /** @var Appointment $appointment */
+                $start = $end = null;
+
+                /**
+                 * Loop through the appointments in the day.
+                 *
+                 * @var Appointment $appointment
+                 */
                 foreach ($this->getAppointmentsInDay($day) as $appointment) {
 
                     /** @var DateTime $dateTime */
                     $dateTime = $appointment->getDatetime();
 
+                    // Add the appointment if the appointment's hour matches the opening hour.
                     if ($dateTime->format('H') === $hour) {
 
+                        // The opening hour is not free anymore.
                         $isFree = false;
 
+                        // Set the end time by adding the appointment's duration.
                         $end = clone $dateTime;
                         $end->add(DateInterval::createFromDateString($appointment->getAppointmentDuration() . " minutes"));
 
-                        $month[$weekNumber][$dayDate]['hours'][$displayTime]['start'] = $dateTime->format('H:i');
-                        $month[$weekNumber][$dayDate]['hours'][$displayTime]['end'] = $end->format('H:i');
+                        $start = $dateTime->format('H:i');
+                        $end = $end->format('H:i');
 
                         break;
                     }
                 }
 
-                $appointmentBefore = $this->getAppointmentBeforeOrAfterHour($dayDate, $openingHour, true);
-                $appointmentAfter = $this->getAppointmentBeforeOrAfterHour($dayDate, $openingHour, false);
+                // Get the appointment before and after the opening hour.
+                $appointmentBefore = $this->getAppointmentBeforeOrAfter($dayDate, $openingHour, true);
+                $appointmentAfter = $this->getAppointmentBeforeOrAfter($dayDate, $openingHour, false);
 
-                if ($isFree) {
+                $dateTimeBefore = null;
 
-                    if ($appointmentBefore && $appointmentAfter) {
+                if ($appointmentBefore) {
 
-                        /** @var DateTime $beforeTime */
-                        $beforeTime = clone $appointmentBefore->getDatetime();
-                        $beforeTime->add(DateInterval::createFromDateString($this->appointment->getAppointmentDuration() . " minutes"));
+                    /** @var DateTime $dateTimeBefore */
+                    $dateTimeBefore = clone $appointmentBefore->getDatetime();
+                    $dateTimeBefore->add(DateInterval::createFromDateString($this->appointment->getAppointmentDuration() . " minutes"));
+                    //$displayTime = $dateTimeBefore->format('H:i');
+                }
 
-                        $displayTime = $beforeTime->format('H:i');
+                if ($appointmentBefore && $appointmentAfter) {
 
-                        $difference = $beforeTime->diff($appointmentAfter->getDatetime());
-                        if ($difference->i < $this->appointment->getAppointmentDuration()) {
+                    $difference = $dateTimeBefore->diff($appointmentAfter->getDatetime());
+
+                    if ($difference->i < $this->appointment->getAppointmentDuration()) {
+                        $isFree = false;
+                    }
+                } elseif (!$appointmentBefore && $appointmentAfter) {
+
+                    $difference = $openingHour->diff($appointmentAfter->getDatetime());
+
+                    if ($difference->i < $this->appointment->getAppointmentDuration()) {
+                        $isFree = false;
+                    }
+                }
+
+
+                // Opening hour
+                $appointmentOpeningHour = clone $this->appointment;
+                $appointmentOpeningHour->setDatetime($openingHour);
+                $appointmentOpeningHour->setDayOfTheAppointment($dayName);
+                $appointmentOpeningHour->openingHours = $this->openingHours;
+
+                if ($hour == $timeOfClose[0]) {
+
+                    $dateTimeOfClose = clone $openingHour;
+                    if (!$this->appointment->isAppointmentAllowedAtClosingHour()) {
+
+                        $dateTimeOfClose->sub(DateInterval::createFromDateString($this->appointment->getAppointmentDuration() . " minutes"));
+
+                    } else {
+                        $dateTimeOfClose->add(DateInterval::createFromDateString($this->appointment->getAppointmentDuration() . " minutes"));
+                    }
+
+                    foreach ($this->getAppointmentsInDay($day) as $appointment) {
+
+                        /** @var DateTime $dateTimeOfAppointment */
+                        $dateTimeOfAppointment = clone $appointment->getDatetime();
+                        $dateTimeOfAppointment->add(DateInterval::createFromDateString($this->appointment->getAppointmentDuration() . " minutes"));
+
+                        if ($dateTimeOfAppointment > $dateTimeOfClose) {
                             $isFree = false;
-                        }
-
-                    } elseif ($appointmentBefore && !$appointmentAfter) {
-
-                        $appointment = clone $appointmentBefore;
-                        $appointment->setDayOfTheAppointment($dayName);
-                        $appointment->openingHours = $this->openingHours;
-
-                        if (!$appointment->isInOpeningHours()) {
-                            $isFree = false;
+                            break;
                         }
                     }
                 }
+
+                if (!$appointmentOpeningHour->isInOpeningHours()) {
+                    $isFree = false;
+                }
+
+                // Add the day date and is free.
                 $month[$weekNumber][$dayDate]['datetime'] = $day;
                 $month[$weekNumber][$dayDate]['hours'][$displayTime]['is_free'] = $isFree;
+
+                if ($start && $end) {
+                    // Add the start and end time to the month array.
+                    $month[$weekNumber][$dayDate]['hours'][$displayTime]['start'] = $start;
+                    $month[$weekNumber][$dayDate]['hours'][$displayTime]['end'] = $end;
+                }
             }
         }
 
@@ -168,28 +240,29 @@ class CalendarBuilder
      * @param bool $before
      * @return Appointment|bool
      */
-    public function getAppointmentBeforeOrAfterHour($dayDate, DateTime $openingHour, $before = true)
+    public function getAppointmentBeforeOrAfter($dayDate, DateTime $openingHour, $before = true)
     {
-        $hour = clone $openingHour;
-
-        if ($before) {
-            $hour->modify('-1 hour');
-        } else {
-            $hour->modify('+1 hour');
-        }
-
-        $hour = $hour->format('H');
-
         foreach ($this->appointments as $appointment) {
 
+            /** @var DateTime $appointmentDate */
             $appointmentDate = clone $appointment->getDatetime();
 
-            if ($dayDate === $appointmentDate->format('Y-m-d') && $appointmentDate->format('H') === $hour) {
+            if ($dayDate === $appointmentDate->format('Y-m-d')) {
 
-                return $appointment;
+                if (
+                    $before &&
+                    $appointmentDate->add(
+                        DateInterval::createFromDateString($this->appointment->getAppointmentDuration() . " minutes")
+                    ) >= $openingHour
+                ) {
+                    return $appointment;
+                }
+
+                if (!$before && $appointmentDate <= $openingHour) {
+                    return $appointment;
+                }
             }
         }
-
         return false;
     }
 }

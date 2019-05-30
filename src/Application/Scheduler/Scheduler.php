@@ -71,6 +71,7 @@ class Scheduler
     {
         $data = json_decode($request->getContent(), true)['data'];
         $datetime = DateTime::createFromFormat("Y-m-d\TH:i", $data['datetime']);
+
         $appointment = new Appointment();
         $appointment
             ->setFullName($data['fullName'])

@@ -71,6 +71,13 @@ class Appointment
     protected $appointmentTimeBetween = 15;
 
     /**
+     * Determines if an appointment can be made at the closing hour.
+     *
+     * @var bool $appointmentAllowedAtClosingHour
+     */
+    protected $appointmentAllowedAtClosingHour = true;
+
+    /**
      * @var string $dayOfTheAppointment
      */
     protected $dayOfTheAppointment;
@@ -90,23 +97,22 @@ class Appointment
     }
 
     /**
-     * @param OpeningHours $openingHours
      * @return bool
      */
     public function isInOpeningHours(): bool
     {
-        $dateOfTheAppointment = $this->getDatetime();
-        $appointmentDuration = $this->getAppointmentDuration();
-
         $open = $this->getOpeningHourOfDayOfAppointment();
         $close = $this->getClosingHourOfDayOfAppointment();
 
+        /** Appointment $lastAppointment */
         $lastAppointment = clone $close;
-        $lastAppointment->sub(DateInterval::createFromDateString($appointmentDuration . ' minutes'));
 
-        $isWithinOpeningHours = $dateOfTheAppointment >= $open && $dateOfTheAppointment <= $lastAppointment;
+        if (!$this->isAppointmentAllowedAtClosingHour()) {
 
-        return $isWithinOpeningHours;
+            $lastAppointment->sub(DateInterval::createFromDateString( $this->getAppointmentDuration() . ' minutes'));
+        }
+
+        return $this->getDatetime() >= $open && $this->getDatetime() <= $lastAppointment;
     }
 
     /**
@@ -119,7 +125,11 @@ class Appointment
         $end = $this->getDateTimeWithAppointmentDurationAdded();
 
         foreach ($appointmentsInDayOfTheAppointment as $appointment) {
-            $dateTimeOfTheAppointment = $appointment->getDatetime();
+
+            /** @var DateTime $dateTimeOfTheAppointment */
+            $dateTimeOfTheAppointment = clone $appointment->getDatetime();
+            $dateTimeOfTheAppointment->add(DateInterval::createFromDateString($this->getAppointmentDuration() . ' minutes'));
+
             if ($dateTimeOfTheAppointment > $start && $dateTimeOfTheAppointment < $end) {
                 return true;
             }
@@ -382,6 +392,25 @@ class Appointment
     public function setDayOfTheAppointment(string $dayOfTheAppointment): Appointment
     {
         $this->dayOfTheAppointment = strtolower($dayOfTheAppointment);
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAppointmentAllowedAtClosingHour(): bool
+    {
+        return $this->appointmentAllowedAtClosingHour;
+    }
+
+    /**
+     * @param bool $appointmentAllowedAtClosingHour
+     * @return Appointment
+     */
+    public function setAppointmentAllowedAtClosingHour(bool $appointmentAllowedAtClosingHour): Appointment
+    {
+        $this->appointmentAllowedAtClosingHour = $appointmentAllowedAtClosingHour;
 
         return $this;
     }

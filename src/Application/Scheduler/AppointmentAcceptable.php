@@ -52,9 +52,6 @@ class AppointmentAcceptable
 
         if ($validated['type'] === "success") {
 
-            // or appointment is in range of the appointment duration.
-            // Take the appointment tie in between in account.
-            // TODO: Cancel appointment (customer)
             return true;
         }
         return false;
