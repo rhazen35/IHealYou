@@ -11,39 +11,39 @@ use Exception;
 class OpeningHours
 {
     /**
-     * @var array $monday
+     * @var array $Monday
      */
-    public $monday;
+    public $Monday;
 
     /**
-     * @var array $tuesday
+     * @var array $Tuesday
      */
-    public $tuesday;
+    public $Tuesday;
 
     /**
-     * @var array $wednesday
+     * @var array $Wednesday
      */
-    public $wednesday;
+    public $Wednesday;
 
     /**
-     * @var array $thursday
+     * @var array $Thursday
      */
-    public $thursday;
+    public $Thursday;
 
     /**
-     * @var array $friday
+     * @var array $Friday
      */
-    public $friday;
+    public $Friday;
 
     /**
-     * @var array $saturday
+     * @var array $Saturday
      */
-    public $saturday;
+    public $Saturday;
 
     /**
-     * @var array $sunday
+     * @var array $Sunday
      */
-    public $sunday;
+    public $Sunday;
 
     /**
      * OpeningHours constructor.
@@ -56,12 +56,12 @@ class OpeningHours
             'end' => [17, 00, 00]
         ];
 
-        $this->monday = $default;
-        $this->tuesday = $default;
-        $this->wednesday = $default;
-        $this->thursday = $default;
-        $this->friday = $default;
-        $this->saturday = $default;
-        $this->sunday = $default;
+        $this->Monday = $default;
+        $this->Tuesday = $default;
+        $this->Wednesday = $default;
+        $this->Thursday = $default;
+        $this->Friday = $default;
+        $this->Saturday = $default;
+        $this->Sunday = $default;
     }
 }

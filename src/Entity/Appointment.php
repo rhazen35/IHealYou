@@ -391,7 +391,7 @@ class Appointment
      */
     public function setDayOfTheAppointment(string $dayOfTheAppointment): Appointment
     {
-        $this->dayOfTheAppointment = strtolower($dayOfTheAppointment);
+        $this->dayOfTheAppointment = $dayOfTheAppointment;
 
         return $this;
     }

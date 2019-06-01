@@ -60,28 +60,24 @@ class CalendarPresenter
                 $html .= '<div class="hours">';
                 foreach ($dayArray['hours'] as $hour => $hourArray) {
 
-                    $class = $hourArray['is_free'] ? 'green' : 'red';
+                    $class = $hourArray['is_open'] ? 'green' : 'red';
                     $html .= '<div class="hour ' . $class . '">';
 
-                    if (!$hourArray['is_free']) {
+                    if (!$hourArray['is_open']) {
                         $html .= '<div>' . $hour . '</div>';
-                        if (isset($hourArray['start']) && isset($hourArray['end'])) {
+                        if (!empty($hourArray['start']) && !empty($hourArray['end'])) {
                             $html .= '<div>' . $hourArray['start'] . ' - ' . $hourArray['end'] . '</div>';
                         }
                     } else {
                         $html .= '<div>' . $hour . '</div>';
                     }
-
                     $html .= '</div>';
                 }
                 $html .= '</div>';
-
                 $html .= '</div>';
             }
-
             $html .= '</div>';
         }
-
         $html .= '</div>';
 
         return $html;
