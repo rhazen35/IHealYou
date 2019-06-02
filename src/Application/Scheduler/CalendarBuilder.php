@@ -57,29 +57,21 @@ class CalendarBuilder
     }
 
     /**
-     * @param Appointment[] $appointments
      * @return array
      * @throws Exception
      */
-    public function buildMonthWithAppointments($appointments): array
+    public function buildMonthWithAppointments(): array
     {
-        $this->appointments = $appointments;
         $month = [];
 
         /** @var DateTime $day */
         foreach ($this->calendar->getMonthDaysForCalendar() as $day) {
 
-            $timeOfOpen = $this->openingHours->{$day->format('l')}['start'];
-            $open = clone $day;
-            $open->setTime($timeOfOpen[0], $timeOfOpen[1], $timeOfOpen[2]);
-
-            $timeOfClose = $this->openingHours->{$day->format('l')}['end'];
-            $close = clone $day;
-            $close->setTime($timeOfClose[0], $timeOfClose[1], $timeOfClose[2]);
-            $close->modify('+1 hour');
-
-            $interval = new DateInterval('PT1H');
-            $openingHoursRange = new DatePeriod($open, $interval, $close);
+            $openingHoursRange = new DatePeriod(
+                $this->openingHours->openingHourOfDay($day),
+                new DateInterval('PT1H'),
+                $this->openingHours->closingHourOfDay($day)
+            );
 
             /** @var DateTime $openingHour */
             foreach ($openingHoursRange as $openingHour) {
@@ -127,5 +119,24 @@ class CalendarBuilder
             }
         }
         return $appointmentsInDay ?? false;
+    }
+
+    /**
+     * @return Appointment[]
+     */
+    public function getAppointments(): array
+    {
+        return $this->appointments;
+    }
+
+    /**
+     * @param Appointment[] $appointments
+     * @return CalendarBuilder
+     */
+    public function setAppointments(array $appointments): CalendarBuilder
+    {
+        $this->appointments = $appointments;
+
+        return $this;
     }
 }

@@ -22,9 +22,8 @@ class ValidateFields
      * ValidateFields constructor.
      * @param AppointmentRepository $appointmentRepository
      */
-    public function __construct(
-        AppointmentRepository $appointmentRepository
-    ) {
+    public function __construct(AppointmentRepository $appointmentRepository)
+    {
         $this->appointmentRepository = $appointmentRepository;
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Application\Scheduler;
 
+use DateTime;
 use Exception;
 
 /**
@@ -63,5 +64,24 @@ class OpeningHours
         $this->Friday = $default;
         $this->Saturday = $default;
         $this->Sunday = $default;
+    }
+
+    public function openingHourOfDay(DateTime $day)
+    {
+        $timeOfOpen = $this->{$day->format('l')}['start'];
+        $open = clone $day;
+        $open->setTime($timeOfOpen[0], $timeOfOpen[1], $timeOfOpen[2]);
+
+        return $open;
+    }
+
+    public function closingHourOfDay(DateTime $day)
+    {
+        $timeOfClose = $this->{$day->format('l')}['end'];
+        $close = clone $day;
+        $close->setTime($timeOfClose[0], $timeOfClose[1], $timeOfClose[2]);
+        $close->modify('+1 hour');
+
+        return $close;
     }
 }

@@ -111,7 +111,6 @@ class Appointment
 
             $lastAppointment->sub(DateInterval::createFromDateString( $this->getAppointmentDuration() . ' minutes'));
         }
-
         return $this->getDatetime() >= $open && $this->getDatetime() <= $lastAppointment;
     }
 

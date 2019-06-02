@@ -83,12 +83,10 @@ class Scheduler
             ->setDayOfTheAppointment($datetime->format('l'))
         ;
 
-        $isAcceptable = $this->acceptableAppointment->isAcceptable($appointment);
+        if ($this->acceptableAppointment->isAcceptable($appointment)) {
 
-        if ($isAcceptable) {
             $this->appointmentRepository->save($appointment);
         }
-
         return $this->acceptableAppointment->getValidated();
     }
 
@@ -99,13 +97,13 @@ class Scheduler
     {
         $calendarMonthDays = $this->calendar->getMonthDaysForCalendar();
 
-        $start = $calendarMonthDays->getStartDate();
-        $end = $calendarMonthDays->getEndDate();
-
-        $appointmentsInCalendarMonth = $this->appointmentRepository->findBetweenDays($start, $end);
-
-        $monthWithAppointments = $this->calendarBuilder->buildMonthWithAppointments($appointmentsInCalendarMonth);
-
-        return $this->calendarPresenter->presentMonthWithAppointments($monthWithAppointments);
+        return $this->calendarPresenter->presentMonthWithAppointments(
+            $this->calendarBuilder->setAppointments(
+                $this->appointmentRepository->findBetweenDays(
+                    $calendarMonthDays->getStartDate(),
+                    $calendarMonthDays->getEndDate()
+                )
+            )->buildMonthWithAppointments()
+        );
     }
 }

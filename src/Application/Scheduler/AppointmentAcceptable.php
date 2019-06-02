@@ -50,11 +50,7 @@ class AppointmentAcceptable
         $validated = $this->validateFields->validate($appointment);
         $this->validated = $validated;
 
-        if ($validated['type'] === "success") {
-
-            return true;
-        }
-        return false;
+        return $validated['type'] === "success" ? true : false;
     }
 
     /**
