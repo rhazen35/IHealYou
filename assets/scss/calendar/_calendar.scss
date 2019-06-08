@@ -1,0 +1,99 @@
+.calendar {
+  width:100%;
+  margin:0 auto;
+  background: $indigo;
+  border:5px solid $indigo;
+  border-top:none;
+
+  .month {
+    display:grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: auto;
+    grid-gap: 1px;
+    box-sizing: border-box;
+
+    .week {
+      display:grid;
+      grid-template-rows: 1fr;
+      grid-template-columns: repeat(8, 1fr);
+      grid-gap: 1px;
+
+      &:first-child {
+
+        .day {
+          padding-top:0.25rem;
+          padding-bottom:0.25rem;
+          color: $white;
+          background: $indigo;
+        }
+      }
+
+      .week-number {
+        font-size:80%;
+      }
+
+      .day {
+        position: relative;
+        display:flex;
+        flex-flow: row wrap;
+        justify-content:space-between;
+        height:1.25rem;
+        line-height:1.25rem;
+        padding:0.5rem;
+        background: $white;
+
+        &:hover {
+          cursor: pointer;
+          color:$white;
+          background: $richBlack;
+        }
+
+        &:hover > .hours {
+          display:block;
+        }
+
+        .day-number {
+          flex:1;
+        }
+
+        .hours {
+          z-index:10000;
+          position:absolute;
+          display:none;
+          flex-flow: column;
+          justify-content: flex-start;
+          left:0;
+          top:2.25rem;
+          width:99%;
+          margin: 0 auto;
+          border:1px solid $richBlack;
+
+          &:hover {
+            display:none;
+          }
+
+          .hour {
+            display:flex;
+            flex-flow: row wrap;
+            justify-content: space-between;
+            padding:0.1rem;
+            color: $white;
+            font-size:70%;
+
+            &:not(:last-child) {
+              border-bottom:1px solid $white;
+            }
+          }
+
+          .green {
+            background: #5cd65c;
+          }
+
+          .red {
+            background: lighten(red, 20%);
+          }
+        }
+      }
+    }
+  }
+}
