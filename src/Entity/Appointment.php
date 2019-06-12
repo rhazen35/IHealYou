@@ -120,16 +120,22 @@ class Appointment
      */
     public function isOverLapping($appointmentsInDayOfTheAppointment)
     {
-        $start = $this->getDateTimeWithAppointmentDurationSubtracted();
+        $start = $this->getDatetime();
         $end = $this->getDateTimeWithAppointmentDurationAdded();
 
         foreach ($appointmentsInDayOfTheAppointment as $appointment) {
 
-            /** @var DateTime $dateTimeOfTheAppointment */
-            $dateTimeOfTheAppointment = clone $appointment->getDatetime();
-            $dateTimeOfTheAppointment->add(DateInterval::createFromDateString($this->getAppointmentDuration() . ' minutes'));
+            /**
+             * @var DateTime $startOfTheAppointment
+             * @var DateTime $endOfTheAppointment
+             */
+            $startOfTheAppointment = clone $appointment->getDatetime();
+            $endOfTheAppointment = clone $appointment->getDatetime();
+            $endOfTheAppointment->add(
+                DateInterval::createFromDateString($this->getAppointmentDuration() . ' minutes')
+            );
 
-            if ($dateTimeOfTheAppointment > $start && $dateTimeOfTheAppointment < $end) {
+            if ($startOfTheAppointment >= $start && $endOfTheAppointment < $end) {
                 return true;
             }
         }

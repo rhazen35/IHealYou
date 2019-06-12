@@ -190,7 +190,6 @@ class HourAwareness
                     ->setIsAware(true)
                 ;
                 break;
-
             }
         }
         return $this;
