@@ -135,7 +135,9 @@ class Appointment
                 DateInterval::createFromDateString($this->getAppointmentDuration() . ' minutes')
             );
 
-            if ($startOfTheAppointment >= $start && $endOfTheAppointment < $end) {
+            if ($start > $startOfTheAppointment && $start < $endOfTheAppointment) {
+                return true;
+            } elseif ($end > $startOfTheAppointment && $end < $endOfTheAppointment) {
                 return true;
             }
         }
