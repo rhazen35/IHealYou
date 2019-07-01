@@ -3,7 +3,8 @@
 {% block title %}Welcome to IHealYou{% endblock %}
 
 {% block body %}
-
+    {% include 'layout/header.html.twig' %}
+    {% include 'layout/banner.html.twig' %}
     <div class="home" id="home">
         <div class="title">
             Are you suffering from migraine, muscle aches everywhere?
@@ -133,4 +134,5 @@
             </p>
         </div>
     </div>
+    {% include 'layout/footer.html.twig' %}
 {% endblock %}

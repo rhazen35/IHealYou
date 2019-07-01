@@ -10,10 +10,7 @@
         {% endblock %}
     </head>
     <body>
-        {% include 'layout/header.html.twig' %}
-        {% include 'layout/banner.html.twig' %}
         {% block body %}{% endblock %}
-        {% include 'layout/footer.html.twig' %}
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
